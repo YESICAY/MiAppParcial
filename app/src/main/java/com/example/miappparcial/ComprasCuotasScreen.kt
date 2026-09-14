@@ -19,7 +19,7 @@ fun ComprasCuotasScreen() {
     var errorValor by remember { mutableStateOf<String?>(null) }
     var errorCuotas by remember { mutableStateOf<String?>(null) }
     var errorTasa by remember { mutableStateOf<String?>(null) }
-    var resultado by remember { mutableStateOf<Triple<Double, Double, Double>?>(null) }
+    var resultado by remember { mutableStateOf<List<Double>?>(null) }
 
     Column(
         modifier = Modifier
@@ -88,7 +88,7 @@ fun ComprasCuotasScreen() {
                     }
                     val totalPagar = valorCuota * cuotas
                     val interesTotal = totalPagar - valor
-                    Triple(valorCuota, totalPagar, interesTotal)
+                    listOf(valor, valorCuota, totalPagar, interesTotal)
                 } else null
             },
             modifier = Modifier.fillMaxWidth()
@@ -96,17 +96,18 @@ fun ComprasCuotasScreen() {
             Text("Calcular")
         }
 
-        resultado?.let { (valorCuota, totalPagar, interesTotal) ->
+        resultado?.let { (valorOriginal, valorCuota, totalPagar, interesTotal) ->
             Spacer(Modifier.height(20.dp))
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(
-                        "Valor de cada cuota: ${Utils.formatearMoneda(valorCuota)}",
-                        style = MaterialTheme.typography.titleMedium
-                    )
+                        "Valor original: ${Utils.formatearMoneda(valorOriginal)}")
+                    Spacer(Modifier.height(8.dp))
+                    Text("Valor de cada cuota: ${Utils.formatearMoneda(valorCuota)}",
+                        style = MaterialTheme.typography.titleMedium)
                     Spacer(Modifier.height(8.dp))
                     Text("Total a pagar: ${Utils.formatearMoneda(totalPagar)}")
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(8.dp))
                     Text("Interés total: ${Utils.formatearMoneda(interesTotal)}")
                 }
             }
